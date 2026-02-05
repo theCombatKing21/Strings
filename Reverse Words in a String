@@ -1,0 +1,65 @@
+class Solution {
+    public String reverseWords(String s) {
+        int n = s.length();
+        List<String> words = new ArrayList<>();
+
+        int i = 0;
+        while (i < n) {
+
+            while (i < n && s.charAt(i) == ' ') {
+                i++;
+            }
+            if (i >= n) {
+                break;
+            }
+
+            int j = i;
+            while (j < n && s.charAt(j) != ' ') {
+                j++;
+            }
+
+            words.add(s.substring(i, j));
+            i = j;
+
+        }
+        Collections.reverse(words);
+        return String.join(" ", words);
+    }
+}
+
+-------------------------------------------------------------------------------------------------------- optimized with auxilary space o(1)
+
+public String reverseWords(String s) {
+    StringBuilder result = new StringBuilder();
+    int i = s.length() - 1;
+
+    while (i >= 0) {
+        // 1️⃣ Skip spaces
+        while (i >= 0 && s.charAt(i) == ' ') {
+            i--;
+        }
+
+        if (i < 0) break;
+
+        // 2️⃣ Mark end of word
+        int end = i;
+
+        // 3️⃣ Move left to find start of word
+        while (i >= 0 && s.charAt(i) != ' ') {
+            i--;
+        }
+
+        // 4️⃣ Extract word
+        String word = s.substring(i + 1, end + 1);
+
+        // 5️⃣ Append to result
+        if (result.length() > 0) {
+            result.append(" ");
+        }
+        result.append(word);
+    }
+
+    return result.toString();
+}
+
+
