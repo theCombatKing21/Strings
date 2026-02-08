@@ -1,0 +1,104 @@
+n^2  solution
+--------------
+import java.util.HashSet;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        int n = s.length();
+        int maxLength = 0;
+        
+        // Try every possible starting index
+        for (int i = 0; i < n; i++) {
+            
+            HashSet<Character> set = new HashSet<>();
+            
+            // Expand substring starting at i
+            for (int j = i; j < n; j++) {
+                
+                char currentChar = s.charAt(j);
+                
+                // If duplicate found, stop this substring
+                if (set.contains(currentChar)) {
+                    break;
+                }
+                
+                set.add(currentChar);
+                maxLength = Math.max(maxLength, j - i + 1);
+            }
+        }
+        
+        return maxLength;
+    }
+}
+------------------------------------------------------------------------------------
+optimized solution using hashSet -
+---------------------------------
+
+import java.util.HashSet;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        // Set to store characters in current window
+        HashSet<Character> set = new HashSet<>();
+        
+        int left = 0;   // Left pointer of window
+        int maxLength = 0; // To store maximum length
+        
+        // Expand window using right pointer
+        for (int right = 0; right < s.length(); right++) {
+            
+            char currentChar = s.charAt(right);
+            
+            // If duplicate character found,
+            // shrink window from left until duplicate is removed
+            while (set.contains(currentChar)) {
+                set.remove(s.charAt(left));
+                left++; // Move left pointer forward
+            }
+            
+            // Add current character to set
+            set.add(currentChar);
+            
+            // Update maximum length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
+----------------------------------------------------------------------------------------------
+
+3. using ASCII frequency array
+-------------------------------
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        // Array to store frequency of characters (ASCII size)
+        int[] freq = new int[256];
+        
+        int left = 0;      // Left pointer of sliding window
+        int maxLength = 0; // Store maximum length
+        
+        for (int right = 0; right < s.length(); right++) {
+            
+            char currentChar = s.charAt(right);
+            
+            // Increase frequency of current character
+            freq[currentChar]++;
+            
+            // If duplicate found, shrink window from left
+            while (freq[currentChar] > 1) {
+                freq[s.charAt(left)]--;
+                left++;
+            }
+            
+            // Update maximum length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
